@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>插件编写</title>
+</head>
+<style>
+    .person-title {
+        text-align: center;
+    }
+
+    .table-wrap {
+        text-align: -webkit-center;
+    }
+
+    .table-wrap table {
+        border-collapse: collapse;
+    }
+
+    table tr th {
+        width: 120px;
+        height: 30px;
+    }
+
+    table tbody tr td {
+        text-align: center;
+        height: 30px;
+    }
+
+    .button-wrap {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .is_show {
+        display: none;
+    }
+
+    .top-select {
+        text-align: center;
+    }
+
+    .top-select select {
+        width: 90px;
+        vertical-align: middle;
+    }
+</style>
+<body>
+<div class="top-select">
+    <label for="person_name">请选择查询人的信息:</label>
+    <select name="persons" id="person_name">
+        <option value="Anna">Anna</option>
+        <option value="Cloud">Cloud</option>
+        <option value="James">James</option>
+        <option value="user_define">自定义</option>
+    </select>
+</div>
+<div id="wrap_table_info"></div>
+<script src="script/lib/jquery.min.js"></script>
+<script src="script/common/page.js"></script>
+<script src="script/common/ajax.js"></script>
+<script src="script/common/form_utils.js"></script>
+<script src="script/common/person.js"></script>
+<script type="text/javascript">
+    (function ($) {
+        var CurPage = {};
+
+        CurPage.Data = (function () {
+
+            var initPage;
+
+            /**
+             * 页面数据初始化
+             */
+            initPage = function () {
+                // 发起ajax请求
+                Ajax.get({
+                    path: "GetPersonInfo",
+                    sucFunc: function (data) {
+                        // 根据值选中下拉框值并触发change事件
+                        form_utils.selectOptions($("#person_name"), data["sel_person_name"], true);
+                    }
+                })
+            };
+            return {
+                initPage: initPage
+            }
+        })();
+
+        CurPage.Event = (function () {
+
+            var initSelectPerson;
+
+            /**
+             *  选择人物下拉框change事件
+             */
+            initSelectPerson = function () {
+                // 页面查询人信息下拉框绑定change事件
+                $("#person_name").on("change", function () {
+                    // 调用共通方法生成人物信息
+                    person_utils.getPersonInfo(this.value);
+                })
+            };
+
+            return {
+                initSelectPerson: initSelectPerson
+            }
+        })();
+
+        Page.init(CurPage);
+    })(jQuery);
+
+</script>
+</body>
+</html>
