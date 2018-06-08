@@ -8,8 +8,18 @@ var reg_map = {
     reg_word: /^[a-zA-Z]$/,
     reg_num: /^[1-9]\d*/
 };
+
+
 /**输入框格式化方法*/
 (function ($) {
+
+    // 增加原型方法
+    $.fn.addValidRules = function (options) {
+        $.each(options,function(item){
+            $("#"+item).addClass("js-valid");
+        })
+    };
+
     /**页面私有方法集合*/
     var initPriEvent,        // 初始化页面私有方法
         priFormatInputSpace; // 输入框自动去除空格

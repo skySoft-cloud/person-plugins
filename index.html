@@ -5,6 +5,16 @@
     <title>插件编写</title>
 </head>
 <style>
+    header {
+        height: 40px;
+        background-color: black;
+        color: #ffffff;
+        text-align: center;
+        line-height: 40px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
     .form-horizontal {
         padding: 15px;
         min-height: 600px;
@@ -77,11 +87,12 @@
 
     .err-msg {
         color: red;
-        font-size:14px;
+        font-size: 14px;
     }
 </style>
 <body>
 <div class="form-horizontal">
+    <header>Jquery 插件学习</header>
     <div class="top-select">
         <label for="person_name">请选择查询人的信息:</label>
         <select name="persons" id="person_name">
@@ -147,6 +158,7 @@
 <script type="text/javascript">
     (function ($) {
         var CurPage = {};
+        var $content = $(".form-horizontal");
 
         CurPage.Data = (function () {
 
@@ -202,6 +214,10 @@
              * 页面表单验证
              */
             initValidate = function () {
+                $content.addValidRules({
+                    user_money: ["num"]
+                });
+
                 $("#user_money").on("blur", function () {
                     var check_money_result = valid_utils.checkNumber($("#user_money")),
                             err_template;
