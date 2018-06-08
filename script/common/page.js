@@ -5,7 +5,8 @@
 
 var Page = (function ($) {
 
-    var init; // 页面初始化方法
+    var init,               // 页面初始化方法
+        clickClearBtnEvent; // 页面clear按钮点击事件
 
     /**
      * 页面初始化方法
@@ -22,6 +23,22 @@ var Page = (function ($) {
             // 执行数据方法
             Curpage.Data[dataFunc]();
         }
+
+        // 页面私有方法执行
+        clickClearBtnEvent();
+    };
+
+    /**
+     * 页面表单点击clear按钮清空事件
+     */
+    clickClearBtnEvent = function () {
+        // id 必须命名为clear，绑定点击事件
+        $("#clear").on("click", function () {
+            // 获取所在表单的父级容器
+            var $parents_form = $(this).parent().parent();
+            // 设置input框为空
+            $parents_form.find("input").val("");
+        })
     };
 
     return {

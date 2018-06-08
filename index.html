@@ -5,6 +5,11 @@
     <title>插件编写</title>
 </head>
 <style>
+    .form-horizontal {
+        padding: 15px;
+        min-height: 600px;
+    }
+
     .person-title {
         text-align: center;
     }
@@ -44,23 +49,101 @@
         width: 90px;
         vertical-align: middle;
     }
+
+    .form-group {
+        padding-top: 15px;
+    }
+
+    .user-define {
+        text-align: center;
+    }
+
+    .user-define select {
+        width: 173px;
+    }
+
+    .display-none {
+        display: none;
+    }
+
+    .btn-group {
+        padding-top: 15px;
+        padding-left: 30px;
+    }
+
+    .btn-group button {
+        margin-right: 20px;
+    }
+
+    .err-msg {
+        color: red;
+        font-size:14px;
+    }
 </style>
 <body>
-<div class="top-select">
-    <label for="person_name">请选择查询人的信息:</label>
-    <select name="persons" id="person_name">
-        <option value="Anna">Anna</option>
-        <option value="Cloud">Cloud</option>
-        <option value="James">James</option>
-        <option value="user_define">自定义</option>
-    </select>
+<div class="form-horizontal">
+    <div class="top-select">
+        <label for="person_name">请选择查询人的信息:</label>
+        <select name="persons" id="person_name">
+            <option value="Anna">Anna</option>
+            <option value="Cloud">Cloud</option>
+            <option value="James">James</option>
+            <option value="user_define">自定义</option>
+        </select>
+    </div>
+    <div class="user-define display-none">
+        <div class="form-group">
+            <label for="username">姓名:</label>
+            <input type="text" id="username">
+        </div>
+        <div class="form-group">
+            <label for="user_sex">性别:</label>
+            <select id="user_sex">
+                <option value="male">male</option>
+                <option value="female">female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="user_age">年龄:</label>
+            <input type="text" id="user_age">
+        </div>
+        <div class="form-group">
+            <label for="user_weight">体重:</label>
+            <input type="text" id="user_weight">
+        </div>
+        <div class="form-group">
+            <label for="user_job">职业:</label>
+            <input type="text" id="user_job">
+        </div>
+        <div class="form-group">
+            <label for="user_favor">爱好:</label>
+            <input type="text" id="user_favor">
+        </div>
+        <div class="form-group">
+            <label for="user_money">经济:</label>
+            <input type="text" id="user_money">
+        </div>
+        <div class="form-group">
+            <label for="user_lover">对象:</label>
+            <input type="text" id="user_lover">
+        </div>
+        <div class="form-group">
+            <label for="user_comment">评价:</label>
+            <input type="text" id="user_comment">
+        </div>
+        <div class="btn-group">
+            <button id="apply">提交</button>
+            <button id="clear">清除</button>
+        </div>
+    </div>
+    <div id="wrap_table_info"></div>
 </div>
-<div id="wrap_table_info"></div>
 <script src="script/lib/jquery.min.js"></script>
 <script src="script/common/page.js"></script>
 <script src="script/common/ajax.js"></script>
 <script src="script/common/form_utils.js"></script>
 <script src="script/common/person.js"></script>
+<script src="script/common/valid_utils.js"></script>
 <script type="text/javascript">
     (function ($) {
         var CurPage = {};
@@ -89,7 +172,7 @@
 
         CurPage.Event = (function () {
 
-            var initSelectPerson;
+            var initSelectPerson, initValidate;
 
             /**
              *  选择人物下拉框change事件
@@ -97,13 +180,41 @@
             initSelectPerson = function () {
                 // 页面查询人信息下拉框绑定change事件
                 $("#person_name").on("change", function () {
-                    // 调用共通方法生成人物信息
-                    person_utils.getPersonInfo(this.value);
+                    var $user_define = $(".user-define"),  // 获取自定义表单jquery对象
+                            $person_table = $("#wrap_table_info");
+                    // 先隐藏自定义用户信息表单
+                    $user_define.hide();
+                    // 如果不是自定义用户
+                    if (this.value != "user_define") {
+                        // 调用共通方法生成人物信息
+                        person_utils.getPersonInfo(this.value);
+                    } else {
+                        // 先隐藏table
+                        $person_table.hide();
+                        // 自定义用户信息,先显示自定义表单
+                        $user_define.show();
+                    }
+
+                })
+            };
+
+            /**
+             * 页面表单验证
+             */
+            initValidate = function () {
+                $("#user_money").on("blur", function () {
+                    var check_money_result = valid_utils.checkNumber($("#user_money")),
+                            err_template;
+                    if (check_money_result != "") {
+                        err_template = `<div class="err-msg">${check_money_result}</div>`;
+                        $(this).parent().append(err_template);
+                    }
                 })
             };
 
             return {
-                initSelectPerson: initSelectPerson
+                initSelectPerson: initSelectPerson,
+                initValidate: initValidate
             }
         })();
 

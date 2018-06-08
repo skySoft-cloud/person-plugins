@@ -56,7 +56,7 @@ var person_utils = (function ($) {
         // 拼接完整人物信息
         person_template += person_template_header + person_template_content;
         // 每次生成人物信息前先清空上一次生成的人物信息
-        $("#wrap_table_info").empty().append(person_template);
+        $("#wrap_table_info").empty().append(person_template).show();
         // 绑定事件，因为需要dom创建后才能绑定事件
         detailControlEvent();
     };
@@ -75,7 +75,7 @@ var person_utils = (function ($) {
                 case"Anna":
                 {
                     person_info = {
-                        name: "Anna Su",
+                        name: "Anna",
                         sex: "female",
                         age: "24",
                         weight: "55",
@@ -88,7 +88,7 @@ var person_utils = (function ($) {
                 case "Cloud":
                 {
                     person_info = {
-                        name: "Cloud Chen",
+                        name: "Cloud",
                         sex: "male",
                         age: "24",
                         weight: "51",
@@ -101,7 +101,7 @@ var person_utils = (function ($) {
                 case "James":
                 {
                     person_info = {
-                        name: "James Luo",
+                        name: "James",
                         sex: "male",
                         age: "26",
                         weight: "62",
